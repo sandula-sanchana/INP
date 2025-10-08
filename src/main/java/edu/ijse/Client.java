@@ -1,5 +1,6 @@
 package edu.ijse;
 
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.Socket;
 import java.util.Scanner;
@@ -13,9 +14,14 @@ public class Client {
             System.out.println("Client started");
             DataOutputStream dataOutputStream=new DataOutputStream(remoteSocket.getOutputStream());
             Scanner scanner=new Scanner(System.in);
+            System.out.print("Message sent to server: ");
             String msg=scanner.nextLine();
-            dataOutputStream.writeUTF("type ur msg: "+msg);//write unicode string
-            dataOutputStream.flush();//save data in the stream
+            dataOutputStream.writeUTF(msg);//write unicode string
+            dataOutputStream.flush();
+
+            DataInputStream dataInputStream=new DataInputStream(remoteSocket.getInputStream());
+            String reply=dataInputStream.readUTF();
+            System.out.println("Reply from server: "+reply);
             remoteSocket.close();
         } catch (Exception e) {
             throw new RuntimeException(e);
